@@ -1,6 +1,0 @@
-name is: Ramesh
-password is: 123654
-name is: ramesh
-password is: 
-name is: ramesh
-password is: 

@@ -1,3 +1,0 @@
-Name: amma
-Password: 
-Id_Number: tk14
