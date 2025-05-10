@@ -3,6 +3,9 @@ from datetime import datetime
 
 Account = {}
 
+
+#-------------------- User Account --------------------
+
 def login():
     username = input ("Enter Your Name: ")
     password = input ("Enter Your Password: ")
@@ -23,23 +26,23 @@ def login():
         return None, None
 
                 
-
+#----------------------- Admin Menu -------------------------
 
 def Adminmenu():
     while True:
         print("\n====== Admin Banking Menu ======")
-        print("1.Account Creation\n")
-        print("2.Deposit Money\n")
-        print("3.Withdraw Money\n")
-        print("4.Check Balance\n")
-        print("5.Transaction History\n")
-        print("6.Transer Money\n")
-        print("7.Change Password\n")
-        print("8.Exit\n")
+        print("Account Creation. ==========[1]")
+        print("Deposit Money. =============[2]")
+        print("Withdraw Money. ============[3]")
+        print("Check Balance. =============[4]")
+        print("Transaction History. =======[5]")
+        print("Transer Money. =============[6]")
+        print("Change Password. ===========[7]")
+        print("Exit. ======================[8]")
 
 
 
-        Choice = input("Choose your choice (1-7):")
+        Choice = input("Choose your choice (1-8):")
         if Choice == "1":
             Account_Creation()
         elif Choice == "2":
@@ -59,21 +62,22 @@ def Adminmenu():
             break
         else:
             print("Invalid Chice")
-            
 
+
+#------------------------ User Menu --------------------------------
 
 def Usermenu():
     while True:
-        print("\n====== Admin Banking Menu ======")
-        print("1.Deposit Money\n")
-        print("2.Withdraw Money\n")
-        print("3.Check Balance\n")
-        print("4.Transaction History\n")
-        print("5.Transer Money\n")
-        print("6.Exit\n")
+        print("\n====== User Banking Menu ======")
+        print("Deposit Money ===============[1]")
+        print("Withdraw Money ==============[2]")
+        print("Check Balance ===============[3]")
+        print("Transaction History =========[4]")
+        print("Transer Money ===============[5]")
+        print("Exit ========================[6]")
 
 
-        Choice = input("Choose your choice (1-7):")
+        Choice = input("Choose your choice (1-6):")
         if Choice == "1":
             Deposit_Money()
         elif  Choice == "2":
@@ -89,6 +93,9 @@ def Usermenu():
             break
         else:
             print("Invalid Chice")
+
+
+#--------------------------- Account Creation -------------------------
 
 def Account_Creation ():
     name = input("Enter Your Name:")
@@ -128,6 +135,10 @@ def append_login_creadentials(usernane, password, role="user"):
     with open ("login.txt", "a") as file:
         file.write(f"{usernane}:{password}:{role}\n")
 
+
+
+#----------------------------- Deposit Money ----------------------------
+
 def Deposit_Money():
 
     account_number = input("Enter your Account Number: ")
@@ -145,6 +156,9 @@ def Deposit_Money():
         print(f"Deposited Successfully. New Balance: ${Account[account_number]["Balance"]:.2f}")
     except ValueError:
         print("Invalid Amount")
+
+
+#----------------------------- Withdraw Money ------------------------------
 
 def Withdraw_Money():
 
@@ -165,15 +179,36 @@ def Withdraw_Money():
         print(f"Withdrawal successful. New Balance: ${Account[account_number]["Balance"]:.2f}")
     except ValueError:
         print("Invalid Amount")
+ 
+
+
+#-------------------------------- Check Balance -------------------------------
 
 def Check_Balance():
-    
+
+    try:
+        with open("create.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(":")
+                if len(parts) == 5:
+                    acc_no, name, user, pwd, balance = parts
+                    Account[acc_no] = {
+                        "Name": name,
+                        "Balance": float(balance),
+                        "Transactions": []
+                    }
+    except FileNotFoundError:
+        print("Account data file not found.")
+        return
+
     account_number = input("Enter your Account Number: ")
     if account_number not in Account:
         print("Account not Available")
         return
-    print(f"Currunt Balance: ${Account[account_number]["Balance"]:.2f} ")
+    print(f"Current Balance: ${Account[account_number]['Balance']:.2f}")
 
+
+#------------------------------ Transaction History ----------------------------
 
 def Transaction_History():
 
@@ -192,16 +227,35 @@ def Transaction_History():
         print(f"{now}- {t}")
 
 
+#--------------------------------- Transer Money -------------------------------
+
 def Transer_Money():
+
+    try:
+        with open("create.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(":")
+                if len(parts) == 5:
+                    acc_no, name, user, pwd, balance = parts
+                    Account[acc_no] = {
+                        "Name": name,
+                        "Balance": float(balance),
+                        "Transactions": []
+                    }
+    except FileNotFoundError:
+        print("Account data file not found.")
+        return
 
     from_acc = input("Enter your Account Number: ")
     if from_acc not in Account:
         print("Sender Account Number is Wrong.")
         return
+
     to_acc = input("Enter Recipient Account Number: ")
     if to_acc not in Account:
         print("Recipient Account Number is Wrong.")
         return
+
     try:
         amount = float(input("Enter Amount to Transfer: "))
         if amount <= 0:
@@ -210,15 +264,19 @@ def Transer_Money():
         if amount > Account[from_acc]["Balance"]:
             print("Insufficient Balance on Account")
             return
-        
+
         Account[from_acc]["Balance"] -= amount
         Account[to_acc]["Balance"] += amount
         Account[from_acc]["Transactions"].append(f"Transferred ${amount:.2f} to {to_acc}")
-        Account[to_acc]["Transactions"].append(f"Transferred ${amount:.2f} to {from_acc}")
-        print(f"Transfer Successful.${amount:.2f} transferred from {from_acc} to {to_acc}")
+        Account[to_acc]["Transactions"].append(f"Received ${amount:.2f} from {from_acc}")
+        print(f"Transfer Successful. ${amount:.2f} transferred from {from_acc} to {to_acc}")
     except ValueError:
         print("Invalid Amount.")
 
+
+
+
+#--------------------------- Change Password ----------------------------
 
 def Change_Password():
     UserNAME = input("Enter Your User Name: ")
@@ -254,6 +312,9 @@ def Change_Password():
 
     except FileNotFoundError:
         print("Something Error Plese Try Again")
+
+
+#---------------------- Calling Main ------------------------------------
 
 def main():
     role, username = login()
