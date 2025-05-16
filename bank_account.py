@@ -6,6 +6,9 @@ Account = {}
 
 #-------------------- User Account --------------------
 
+
+
+
 def login():
     username = input ("Enter Your Name: ")
     password = input ("Enter Your Password: ")
@@ -17,7 +20,7 @@ def login():
                 if len(parts) == 3:
                     saved_user, saved_pass, role = parts
                     if username == saved_user and password == saved_pass:
-                        print(f"Login Successfully. Welcome...{username}")
+                        print(f"Login Successfully. Welcome... {username}")
                         return role, username
             print("Invalid UserName or Password")
             return None, None
@@ -25,6 +28,15 @@ def login():
         print("Error")
         return None, None
 
+# def check_admin_Status(username, account_number):
+#     if account_number in Account:
+#         role = Account[account_number].get('role', 'user')
+#         if role == 'admin':
+#             print("You are Admin")
+#         else:
+#             print("You are Customer")
+#     else:
+#         print("User not found")
                 
 #----------------------- Admin Menu -------------------------
 
@@ -97,10 +109,19 @@ def Usermenu():
 
 #--------------------------- Account Creation -------------------------
 
+
 def Account_Creation ():
     name = input("Enter Your Name:")
+    
     user_name = input("Entert Your User Name: ")
-    user_password = input("Eanter Your Password: ")
+    while True:    
+            user_password = input("Eanter Your Password: ")
+            if len (user_password) >=7:
+                print("Password is Succses Full")
+                break
+
+            else:
+                print("atleast Minumum 7 letters")
 
     while True:
         try:
