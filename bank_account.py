@@ -323,7 +323,9 @@ def main():
         return
     if role == "admin":
         Adminmenu()
-    else:
+    elif role == "user":
         Usermenu()
+    else:
+        print("Invalid User Name Password.")
 
 main()
